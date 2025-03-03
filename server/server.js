@@ -7,8 +7,6 @@ const { Server } = require("socket.io");
 const Chat = require("./models/Chat");
 const User = require("./models/User");
 
-
-
 const authRoutes = require("./routes/auth-routes/index");
 const mediaRoutes = require("./routes/instructor-routes/media-routes");
 const instructorCourseRoutes = require("./routes/instructor-routes/course-routes");
@@ -17,6 +15,10 @@ const studentViewOrderRoutes = require("./routes/student-routes/order-routes");
 const studentCoursesRoutes = require("./routes/student-routes/student-courses-routes");
 const studentCourseProgressRoutes = require("./routes/student-routes/course-progress-routes");
 const khaltiPaymentRoutes = require("./routes/student-routes/khalti-payment-routes");
+
+// ✅ Newly Added Routes
+const instructorRoutes = require("./routes/instructorRoutes");
+const studentRoutes = require("./routes/studentRoutes");
 
 const app = express();
 const server = createServer(app);
@@ -41,13 +43,13 @@ app.use(
 );
 app.use(express.json());
 
-// Database connection
+// ✅ Database Connection
 mongoose
-  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+     .connect(MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((e) => console.error("❌ MongoDB Connection Error:", e));
 
-// Fetch all users
+// ✅ Fetch all users
 app.get("/api/users", async (req, res) => {
   try {
     const users = await User.find({}, "_id userName");
@@ -58,7 +60,7 @@ app.get("/api/users", async (req, res) => {
   }
 });
 
-// Fetch chat history between two users
+// ✅ Fetch chat history between two users
 app.get("/api/chats/:user1/:user2", async (req, res) => {
   try {
     const { user1, user2 } = req.params;
@@ -77,7 +79,7 @@ app.get("/api/chats/:user1/:user2", async (req, res) => {
   }
 });
 
-// Socket.io real-time chat handling
+// ✅ Socket.io Real-Time Chat Handling
 const userSockets = new Map();
 
 io.on("connection", (socket) => {
@@ -124,7 +126,7 @@ io.on("connection", (socket) => {
   });
 });
 
-// Routes configuration
+// ✅ Routes Configuration
 app.use("/auth", authRoutes);
 app.use("/media", mediaRoutes);
 app.use("/instructor/course", instructorCourseRoutes);
@@ -134,7 +136,11 @@ app.use("/student/courses-bought", studentCoursesRoutes);
 app.use("/student/course-progress", studentCourseProgressRoutes);
 app.use("/payment/khalti-return", khaltiPaymentRoutes);
 
-// Global error handler
+// ✅ Newly Added Routes
+app.use("/instructor", instructorRoutes);
+app.use("/student", studentRoutes);
+
+// ✅ Global Error Handler
 app.use((err, req, res, next) => {
   console.error("❌ Global Error Handler:", err.stack);
   res.status(500).json({
@@ -143,6 +149,7 @@ app.use((err, req, res, next) => {
   });
 });
 
+// ✅ Start Server
 server.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
 });

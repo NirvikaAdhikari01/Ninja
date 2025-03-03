@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { useContext, useState } from "react";
 import { AuthContext } from "@/context/auth-context";
 import ChatBox from "@/chat/ChatBox.jsx"; // ✅ Import ChatBox Component
-
+import { Dumbbell } from "lucide-react";
 function StudentViewCommonHeader() {
   const navigate = useNavigate();
   const { auth, resetCredentials } = useContext(AuthContext); // ✅ Extract `auth`
@@ -48,6 +48,13 @@ function StudentViewCommonHeader() {
               My Courses
             </span>
             <TvMinimalPlay className="w-8 h-8 cursor-pointer" />
+          </div>
+
+          <div onClick={() => navigate("/personal-training")} className="flex cursor-pointer items-center gap-3">
+            <span className="font-extrabold md:text-xl text-[14px]">
+              Personal Training
+            </span>
+            <Dumbbell className="w-8 h-8 cursor-pointer" />
           </div>
 
           {/* ✅ Chat Button */}

@@ -12,7 +12,11 @@ const UserSchema = new mongoose.Schema(
     },
     password: { type: String, required: true },
     role: { type: String, required: true, enum: ["user", "instructor"] },
-    esewaNumber: { type: String, required: function () { return this.role === "instructor"; } } // Required only if role is instructor
+    esewaNumber: { 
+      type: String, 
+      required: function () { return this.role === "instructor"; } 
+    }, // Required only if role is instructor
+
   },
   { timestamps: true }
 );

@@ -73,6 +73,29 @@ export async function updateCourseByIdService(id, formData) {
   return data;
 }
 
+
+export async function saveInstructorIntroService(formData) {
+  try {
+    const { data } = await axiosInstance.post("/instructor/intro/save", formData, {
+      headers: { "Content-Type": "multipart/form-data" },  // ✅ Use multipart for files
+    });
+    return data;
+  } catch (error) {
+    console.error("❌ Error saving instructor intro:", error);
+    return { success: false, message: "Failed to save data" };
+  }
+}
+export async function fetchAllPersonalTrainingInstructors() {
+  try {
+    const { data } = await axiosInstance.get("/instructor/intro/all");
+    return data;
+  } catch (error) {
+    console.error("❌ Error fetching personal training instructors:", error);
+    return { success: false, message: "Failed to fetch instructors" };
+  }
+}
+
+
 export async function mediaBulkUploadService(formData, onProgressCallback) {
   const { data } = await axiosInstance.post("/media/bulk-upload", formData, {
     onUploadProgress: (progressEvent) => {
